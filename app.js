@@ -1,17 +1,6 @@
 const STORAGE_KEY = 'portfolioProjects-v1';
 
-function getSampleProjectsFromHtml() {
-    const script = document.getElementById('sample-projects');
-    if (!script) return [];
-
-    try {
-        return JSON.parse(script.textContent || '[]');
-    } catch {
-        return [];
-    }
-}
-
-const sampleProjects = getSampleProjectsFromHtml();
+const sampleProjects = Array.isArray(window.sampleProjects) ? window.sampleProjects : [];
 
 const refs = {
     navButtons: [...document.querySelectorAll('.nav-btn')],
@@ -78,7 +67,7 @@ function normalizeStatusKey(status) {
         .trim();
 }
 
-function formatStatusLabel(status) {
+function formatStatusLabel(status = 'desconhecido') {
     const normalized = normalizeStatusKey(status);
     const statusClass = {
         'concluido': 'status-concluido',
@@ -152,18 +141,27 @@ function renderProjects(filter = 'all') {
 }
 
 function openModal(project) {
-    refs.modalTag.textContent = project.category;
-    refs.modalTag.className = `modal-tag tag-${project.category}`;
-    refs.modalTitle.textContent = project.name;
-    refs.modalDesc.textContent = project.description;
-    refs.modalTech.innerHTML = project.tech
+    const techList = Array.isArray(project.tech) ? project.tech : [];
+    const githubLink = project.github ? project.github : '#';
+    const githubText = project.github ? 'Ver no GitHub' : 'GitHub não disponível';
+
+    refs.modalTag.textContent = project.category || 'Sem categoria';
+    refs.modalTag.className = `modal-tag tag-${project.category || 'unknown'}`;
+    refs.modalTitle.textContent = project.name || 'Projeto sem nome';
+    refs.modalDesc.textContent = project.description || 'Descrição não disponível.';
+    refs.modalTech.innerHTML = techList
         .map((tech) => `<span class="tech-pill">${tech}</span>`)
         .join('');
-    refs.modalLoc.textContent = `${project.loc} LOC`;
-    refs.modalStatus.innerHTML = formatStatusLabel(project.status);
-    refs.modalGithub.textContent = 'Ver no GitHub';
-    refs.modalGithub.href = project.github;
-    refs.modalGithub.target = '_blank';
+    refs.modalLoc.textContent = project.loc != null ? `${project.loc} LOC` : 'LOC não disponível';
+    refs.modalStatus.innerHTML = formatStatusLabel(project.status || 'desconhecido');
+    refs.modalGithub.textContent = githubText;
+    refs.modalGithub.href = githubLink;
+
+    if (project.github) {
+        refs.modalGithub.target = '_blank';
+    } else {
+        refs.modalGithub.removeAttribute('target');
+    }
 
     refs.modalBackdrop.classList.add('open');
 }
