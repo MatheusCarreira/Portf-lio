@@ -1,24 +1,6 @@
 const STORAGE_KEY = 'portfolioProjects-v1';
 
 const sampleProjects = [
-    {
-        name: 'API de Filmes',
-        description: 'Uma API REST para buscar filmes, filtrar por genero e mostrar detalhes de cada titulo.',
-        tech: ['Node.js', 'Express', 'MongoDB'],
-        category: 'API',
-        loc: 420,
-        github: 'https://github.com/MatheusCarreira/api-filmes',
-        status: 'concluído',
-    },
-    {
-        name: 'Classificador de Imagens',
-        description: 'Um projeto de ML que identifica categorias de imagens usando redes neurais e TensorFlow.',
-        tech: ['Python', 'TensorFlow', 'Pandas'],
-        category: 'ML',
-        loc: 1080,
-        github: 'https://github.com/MatheusCarreira/classificador-imagens',
-        status: 'em andamento',
-    },
 
 ];
 
