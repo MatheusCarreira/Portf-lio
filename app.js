@@ -1,43 +1,17 @@
 const STORAGE_KEY = 'portfolioProjects-v1';
 
-const sampleProjects = [
-    {
-        name: 'Ninja Stick Game',
-        description: 'Um jogo de arcade onde o jogador controla um ninja e lança estacas em inimigos.',
-        tech: ['JavaScript', 'HTML', 'CSS'],
-        category: 'Web',
-        loc: 800,
-        github: 'https://github.com/MatheusCarreira/game/tree/main',
-        status: 'concluído',
-    },
-    {
-        name: 'Projeto Yu-Gi-Oh!',
-        description: 'Criação de um site interativo com HTML, CSS e JavaScript para dar vida aos cards de Yu-Gi-Oh!',
-        tech: ['JavaScript', 'HTML', 'CSS'],
-        category: 'Web',
-        loc: 1080,
-        github: 'https://github.com/MatheusCarreira/Projeto-Yu-Gi-Oh',
-        status: 'concluido',
-    }, 
-    {
-        name: 'Página de Login',
-        description: 'Uma página de Login com validações puramente em JavaScript, focada em boas práticas de UX e segurança no Front-end',
-        tech: ['JavaScript', 'HTML', 'CSS'],
-        category: 'Web',
-        loc: 587,
-        github: 'https://github.com/MatheusCarreira/VerificacaoEmJS',
-        status: 'concluido',
-    },
-    {
-        name:'Açaí Na Veia - Calculadora de Precificação',
-        description:'Ferramenta para calcular custo e preço de venda de porções de açaí com margem sugerida.',
-        tech: ['JavaScript', 'HTML', 'CSS'],
-        category: 'Web',
-        loc: 350,
-        github: 'https://github.com/MatheusCarreira/CalcularAcai'
-    },
+function getSampleProjectsFromHtml() {
+    const script = document.getElementById('sample-projects');
+    if (!script) return [];
 
-];
+    try {
+        return JSON.parse(script.textContent || '[]');
+    } catch {
+        return [];
+    }
+}
+
+const sampleProjects = getSampleProjectsFromHtml();
 
 const refs = {
     navButtons: [...document.querySelectorAll('.nav-btn')],
@@ -140,7 +114,9 @@ function updateStats() {
 
 function renderProjects(filter = 'all') {
     refs.projectsGrid.innerHTML = '';
-    const filtered = projects.filter((project) => filter === 'all' || project.category === filter);
+    const filtered = projects.filter((project) =>
+        filter === 'all' || project.category.toLowerCase() === filter.toLowerCase()
+    );
 
     if (filtered.length === 0) {
         const emptyMessage = document.createElement('p');
